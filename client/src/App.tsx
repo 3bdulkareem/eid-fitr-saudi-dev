@@ -2,8 +2,8 @@ import { useState, useEffect, useRef } from 'react'
 import { 
   Gift, Calendar, MapPin, ChefHat, Sparkles, 
   Moon, Sun, Clock, Users, Heart, Share2,
-  Plus, Trash2, Check, Wand2, Quote,
-  Utensils, Music, Flame, Star, Home, Linkedin, Zap
+  Plus, Trash2, Check, Wand2,
+  Utensils, Music, Flame, Star, Home, Zap, Copy
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
@@ -16,7 +16,6 @@ import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { toast } from 'sonner'
-import PromptTemplatesSection from '@/components/PromptTemplatesSection'
 import './App.css'
 
 // Types
@@ -56,22 +55,6 @@ interface Recipe {
   instructions: string[]
   region: string
   image: string
-}
-
-interface PromptTemplate {
-  id: string
-  title: string
-  category: string
-  prompt: string
-  tips: string[]
-}
-
-interface DesignSize {
-  id: string
-  name: string
-  dimensions: string
-  aspectRatio: string
-  platform: string
 }
 
 // Nano Banana Card Designs - Modern 3D Style
@@ -132,77 +115,325 @@ const nanoBananaDesigns = [
   },
 ]
 
-// Design Sizes for Nano Banana
-const designSizes: DesignSize[] = [
-  { id: '1', name: 'سناب شات', dimensions: '1080 × 1920', aspectRatio: '9:16', platform: 'Snapchat' },
-  { id: '2', name: 'انستقرام - مربع', dimensions: '1080 × 1080', aspectRatio: '1:1', platform: 'Instagram' },
-  { id: '3', name: 'انستقرام - ستوري', dimensions: '1080 × 1920', aspectRatio: '9:16', platform: 'Instagram' },
-  { id: '4', name: 'تيك توك', dimensions: '1080 × 1920', aspectRatio: '9:16', platform: 'TikTok' },
-  { id: '5', name: 'تويتر/إكس', dimensions: '1200 × 675', aspectRatio: '16:9', platform: 'Twitter/X' },
-  { id: '6', name: 'فيسبوك', dimensions: '1200 × 628', aspectRatio: '16:9', platform: 'Facebook' },
-  { id: '7', name: 'مستطيل أفقي', dimensions: '1600 × 900', aspectRatio: '16:9', platform: 'Custom' },
-  { id: '8', name: 'مستطيل عمودي', dimensions: '900 × 1600', aspectRatio: '9:16', platform: 'Custom' }
-]
-
-// Nano Banana Prompt Templates for Eid
-const promptTemplates: PromptTemplate[] = [
+// Prompt Templates for Nano Banana
+const nanoBananaPrompts = [
   {
     id: '1',
-    title: 'بطاقة تهنئة فاخرة',
-    category: 'تهنئة',
-    prompt: 'صمم بطاقة تهنئة بعيد الفطر فاخرة وأنيقة بألوان ذهبية وأخضر غامق، تتضمن نصاً يقول "كل عام وأنتم بخير" مع زخارف إسلامية جميلة وفانوس رمضاني',
-    tips: ['استخدم الألوان الدافئة والذهبية', 'أضف عناصر إسلامية أصيلة', 'اجعل النص واضحاً وقابلاً للقراءة']
+    title: 'تصميم عيد فاخر',
+    category: 'فاخر',
+    emoji: '✨',
+    prompt: 'صمم بطاقة تهنئة بعيد الفطر المبارك بأسلوب فاخر وراقٍ، استخدم ألوان الذهبي والأخضر الزمردي، أضف زخارف إسلامية هندسية، خلفية داكنة بتدرجات ناعمة، نص عربي خطي بخط نسخ جميل يقول "عيد مبارك وكل عام وأنتم بخير"، أضف هلال وقبة مسجد بأسلوب minimalist.',
+    tips: ['استخدم خلفية داكنة للحصول على مظهر فاخر', 'الألوان الذهبية تعطي إحساس الفخامة']
   },
   {
     id: '2',
     title: 'تصميم عيد حديث',
     category: 'حديث',
-    prompt: 'أنشئ تصميم عيد فطر حديث وجريء باستخدام ألوان نيون (أزرق وبنفسجي ووردي) مع عناصر هندسية معاصرة وأشكال ديناميكية، أضف نصاً يقول "عيد مبارك" بخط عصري',
-    tips: ['استخدم الألوان النيون الجريئة', 'أضف حركة وديناميكية', 'اختر خطوط عصرية وحديثة']
+    emoji: '🎨',
+    prompt: 'اصنع تصميم عيد الفطر بأسلوب عصري وحديث، استخدم ألوان نيون زاهية (أخضر نيون وأزرق سماوي)، أضف أشكال هندسية عصرية وتدرجات gradient، نص عربي بخط عصري يقول "عيد مبارك"، خلفية بيضاء أو رمادية فاتحة، أضف تأثيرات ضوئية وبريق.',
+    tips: ['الألوان النيون تناسب منصات التواصل الاجتماعي', 'الأسلوب الحديث يجذب الجمهور الشاب']
   },
   {
     id: '3',
     title: 'تصميم عائلي دافئ',
     category: 'عائلي',
-    prompt: 'صمم بطاقة عيد عائلية دافئة تظهر عائلة سعودية سعيدة بملابس تقليدية، مع ألوان دافئة وزخارف نباتية، أضف جملة "عيد مبارك لعائلتنا الكريمة"',
-    tips: ['استخدم ألوان دافئة وهادئة', 'أضف عناصر عائلية', 'اجعل الأجواء دافئة وودية']
+    emoji: '👨‍👩‍👧‍👦',
+    prompt: 'صمم بطاقة عيد الفطر بأسلوب عائلي دافئ ومبهج، استخدم ألوان دافئة (برتقالي، أصفر، وردي فاتح)، أضف رسوم كرتونية لعائلة سعيدة بالزي السعودي، خلفية بيضاء ناصعة، نص عربي ملون يقول "عيد مبارك لعائلتنا الحبيبة"، أضف نجوم وقلوب وزخارف مرحة.',
+    tips: ['الألوان الدافئة تعطي إحساس الدفء والمحبة', 'مناسب لمشاركة مع العائلة والأصدقاء']
   },
   {
     id: '4',
-    title: 'تصميم ديني ملهم',
+    title: 'تصميم ديني أصيل',
     category: 'ديني',
-    prompt: 'أنشئ تصميماً إسلامياً ملهماً لعيد الفطر مع آيات قرآنية جميلة، فانوس رمضاني متوهج، وألوان إسلامية تقليدية (أخضر وذهبي وأزرق سماوي)',
-    tips: ['استخدم الآيات القرآنية الملهمة', 'أضف عناصر إسلامية أصيلة', 'اختر ألواناً دينية محترمة']
+    emoji: '🕌',
+    prompt: 'اصنع تصميم عيد الفطر بأسلوب إسلامي أصيل، استخدم ألوان الأخضر والأبيض والذهبي، أضف زخارف إسلامية تقليدية (أرابيسك)، صورة مسجد أو هلال وقمر، نص قرآني أو دعاء بخط عربي جميل، خلفية بنمط إسلامي هندسي، أضف نجمة وهلال.',
+    tips: ['الأنماط الإسلامية تضيف عمقاً ثقافياً', 'مناسب للمناسبات الدينية']
   },
   {
     id: '5',
-    title: 'تصميم احتفالي مرح',
+    title: 'تصميم احتفالي مبهج',
     category: 'احتفالي',
-    prompt: 'صمم بطاقة احتفالية مرحة لعيد الفطر مع ألعاب نارية وألوان زاهية متعددة، أضف نصاً يقول "عيد سعيد" مع رموز احتفالية وكونفيتي',
-    tips: ['استخدم ألواناً زاهية ومرحة', 'أضف عناصر احتفالية', 'اجعل التصميم مليئاً بالفرح والسعادة']
+    emoji: '🎉',
+    prompt: 'صمم بطاقة عيد الفطر احتفالية ومبهجة، استخدم ألوان زاهية ومتعددة (أحمر، أصفر، أزرق، أخضر)، أضف ألعاب نارية وبالونات وقصاصات ورق ملونة، نص كبير وجريء يقول "عيد مبارك"، خلفية داكنة لإبراز الألوان، أضف تأثيرات confetti.',
+    tips: ['الألوان المتعددة تعطي إحساس الاحتفال', 'مناسب للنشر في يوم العيد مباشرة']
   },
   {
     id: '6',
-    title: 'تصميم تقليدي سعودي',
+    title: 'تصميم سعودي تقليدي',
     category: 'تقليدي',
-    prompt: 'صمم بطاقة عيد بأسلوب تقليدي سعودي أصيل، استخدم الألوان الخضراء والذهبية مع زخارف هندسية إسلامية، أضف العلم السعودي والنسر',
-    tips: ['استخدم الرموز السعودية الأصيلة', 'أضف زخارف هندسية إسلامية', 'احترم التقاليد السعودية']
+    emoji: '🇸🇦',
+    prompt: 'اصنع تصميم عيد الفطر بالهوية السعودية، استخدم ألوان العلم السعودي (أخضر وأبيض)، أضف صورة الكعبة المشرفة أو مسجد الملك عبدالله، زخارف سعودية تقليدية، نص بخط عربي أصيل يقول "عيد مبارك من أرض الحرمين"، أضف نخلة وسيف بأسلوب فني.',
+    tips: ['الهوية السعودية تضيف طابعاً وطنياً', 'مناسب لمشاركة مع الأصدقاء والزملاء']
   },
   {
     id: '7',
-    title: 'تصميم فني عالي الجودة',
+    title: 'تصميم فني إبداعي',
     category: 'فني',
-    prompt: 'أنشئ تصميماً فنياً عالي الجودة لعيد الفطر بأسلوب فنان عالمي مشهور، استخدم تقنيات فنية متقدمة مع ألوان متناسقة وتكوين احترافي',
-    tips: ['استخدم تقنيات فنية متقدمة', 'اختر ألواناً متناسقة', 'اجعل التصميم احترافياً وراقياً']
+    emoji: '🎭',
+    prompt: 'صمم بطاقة عيد الفطر بأسلوب فني إبداعي، استخدم تقنية watercolor أو oil painting، ألوان متدرجة وناعمة (بنفسجي، وردي، أزرق)، أضف عناصر طبيعية (زهور، أوراق شجر)، نص بخط يدوي جميل يقول "عيد مبارك"، خلفية بتأثير ورق قديم أو كانفاس.',
+    tips: ['أسلوب الألوان المائية يعطي مظهراً فنياً رائياً', 'مناسب للمصممين ومحبي الفن']
   },
   {
     id: '8',
     title: 'تصميم للأطفال',
     category: 'أطفال',
-    prompt: 'صمم بطاقة عيد فطر جميلة للأطفال مع رسومات كرتونية لطيفة، ألوان زاهية وآمنة، أشكال بسيطة وودية، أضف جملة "عيد مبارك يا أحلى أطفال"',
-    tips: ['استخدم رسومات كرتونية لطيفة', 'اختر ألواناً آمنة وزاهية', 'اجعل التصميم بسيطاً وسهل الفهم']
-  }
+    emoji: '🧒',
+    prompt: 'اصنع تصميم عيد الفطر للأطفال بأسلوب كرتوني مرح، استخدم ألوان زاهية وبراقة، أضف شخصيات كرتونية سعيدة، هلال وقمر بوجه مبتسم، نجوم ملونة، نص كبير وملون يقول "عيد مبارك يا صغيري"، أضف حلوى وكعك العيد بأسلوب كرتوني.',
+    tips: ['الأسلوب الكرتوني يناسب الأطفال', 'الألوان الزاهية تجذب انتباه الأطفال']
+  },
 ]
+
+const designSizes = [
+  { id: '1', name: 'سناب شات', dimensions: '1080 × 1920', aspectRatio: '9:16', platform: 'Snapchat', icon: '👻' },
+  { id: '2', name: 'انستقرام - مربع', dimensions: '1080 × 1080', aspectRatio: '1:1', platform: 'Instagram', icon: '📷' },
+  { id: '3', name: 'انستقرام - ستوري', dimensions: '1080 × 1920', aspectRatio: '9:16', platform: 'Instagram', icon: '📱' },
+  { id: '4', name: 'تيك توك', dimensions: '1080 × 1920', aspectRatio: '9:16', platform: 'TikTok', icon: '🎵' },
+  { id: '5', name: 'تويتر/إكس', dimensions: '1200 × 675', aspectRatio: '16:9', platform: 'Twitter/X', icon: '🐦' },
+  { id: '6', name: 'فيسبوك - منشور', dimensions: '1200 × 630', aspectRatio: '1.91:1', platform: 'Facebook', icon: '👍' },
+  { id: '7', name: 'مستطيل أفقي', dimensions: '1920 × 1080', aspectRatio: '16:9', platform: 'عام', icon: '🖥️' },
+  { id: '8', name: 'مستطيل عمودي', dimensions: '1080 × 1350', aspectRatio: '4:5', platform: 'عام', icon: '📄' },
+]
+
+function NanoBananaPromptsSection() {
+  const [selectedPrompt, setSelectedPrompt] = useState(nanoBananaPrompts[0])
+  const [selectedSize, setSelectedSize] = useState(designSizes[0])
+  const [customName, setCustomName] = useState('')
+  const [customMessage, setCustomMessage] = useState('')
+  const [copiedPrompt, setCopiedPrompt] = useState(false)
+
+  const buildFinalPrompt = () => {
+    let finalPrompt = selectedPrompt.prompt
+    if (customName) finalPrompt += ` اكتب اسم "${customName}" على البطاقة.`
+    if (customMessage) finalPrompt += ` أضف رسالة خاصة: "${customMessage}".`
+    finalPrompt += ` المقاس المطلوب: ${selectedSize.dimensions} (${selectedSize.aspectRatio}) مناسب لـ ${selectedSize.platform}.`
+    return finalPrompt
+  }
+
+  const copyPrompt = () => {
+    const prompt = buildFinalPrompt()
+    navigator.clipboard.writeText(prompt)
+    setCopiedPrompt(true)
+    toast.success('تم نسخ البرومبت! الصقه الآن في نانو بنانا 🍌')
+    setTimeout(() => setCopiedPrompt(false), 3000)
+  }
+
+  const sharePrompt = async () => {
+    const prompt = buildFinalPrompt()
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: 'برومبت عيد الفطر', text: prompt })
+      } catch {
+        copyPrompt()
+      }
+    } else {
+      copyPrompt()
+    }
+  }
+
+  return (
+    <div className="space-y-8" dir="rtl">
+      {/* Header */}
+      <div className="text-center space-y-3">
+        <div className="inline-flex items-center gap-2 bg-emerald-100 dark:bg-emerald-900/30 px-4 py-2 rounded-full">
+          <Zap className="w-5 h-5 text-emerald-600" />
+          <span className="text-emerald-700 dark:text-emerald-300 font-medium text-sm">برومبتات جاهزة لنانو بنانا</span>
+        </div>
+        <h3 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
+          🍌 مولد برومبتات عيد الفطر
+        </h3>
+        <p className="text-gray-500 dark:text-gray-400 max-w-lg mx-auto">
+          اختر البرومبت المناسب، حدد المقاس، ثم انسخه مباشرة إلى أداة نانو بنانا لإنشاء تصميمك
+        </p>
+      </div>
+
+      {/* How to use guide */}
+      <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-2xl p-5">
+        <h4 className="font-bold text-amber-800 dark:text-amber-300 mb-3 flex items-center gap-2">
+          <span className="text-lg">📖</span> دليل الاستخدام
+        </h4>
+        <div className="grid sm:grid-cols-4 gap-3">
+          {[
+            { step: '1', text: 'اختر البرومبت المناسب من القائمة' },
+            { step: '2', text: 'حدد مقاس التصميم للمنصة المطلوبة' },
+            { step: '3', text: 'أضف اسمك أو رسالتك الخاصة (اختياري)' },
+            { step: '4', text: 'انسخ البرومبت والصقه في نانو بنانا' },
+          ].map(item => (
+            <div key={item.step} className="flex items-start gap-2">
+              <span className="flex-shrink-0 w-7 h-7 bg-amber-500 text-white rounded-full flex items-center justify-center text-sm font-bold">{item.step}</span>
+              <p className="text-sm text-amber-700 dark:text-amber-300">{item.text}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="grid lg:grid-cols-2 gap-8">
+        {/* Left: Selection Panel */}
+        <div className="space-y-6">
+          {/* Prompt Selection */}
+          <div className="space-y-3">
+            <h4 className="font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+              <span>🎨</span> اختر نوع التصميم
+            </h4>
+            <div className="grid grid-cols-2 gap-2">
+              {nanoBananaPrompts.map(prompt => (
+                <button
+                  key={prompt.id}
+                  onClick={() => setSelectedPrompt(prompt)}
+                  className={`text-right p-3 rounded-xl border-2 transition-all ${
+                    selectedPrompt.id === prompt.id
+                      ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/30'
+                      : 'border-gray-200 dark:border-gray-700 hover:border-emerald-300 bg-white dark:bg-gray-800'
+                  }`}
+                >
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-xl">{prompt.emoji}</span>
+                    <span className="font-medium text-sm text-gray-800 dark:text-gray-200">{prompt.title}</span>
+                  </div>
+                  <span className="text-xs text-gray-500 bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded-full">{prompt.category}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Size Selection */}
+          <div className="space-y-3">
+            <h4 className="font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+              <span>📐</span> اختر مقاس التصميم
+            </h4>
+            <div className="grid grid-cols-2 gap-2">
+              {designSizes.map(size => (
+                <button
+                  key={size.id}
+                  onClick={() => setSelectedSize(size)}
+                  className={`text-right p-3 rounded-xl border-2 transition-all ${
+                    selectedSize.id === size.id
+                      ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-900/30'
+                      : 'border-gray-200 dark:border-gray-700 hover:border-emerald-300 bg-white dark:bg-gray-800'
+                  }`}
+                >
+                  <div className="flex items-center gap-2 mb-1">
+                    <span>{size.icon}</span>
+                    <span className="font-medium text-sm text-gray-800 dark:text-gray-200">{size.name}</span>
+                  </div>
+                  <p className="text-xs text-gray-500">{size.dimensions}</p>
+                  <p className="text-xs text-emerald-600 dark:text-emerald-400">{size.platform}</p>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Optional customization */}
+          <div className="space-y-3">
+            <h4 className="font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+              <span>✏️</span> تخصيص إضافي (اختياري)
+            </h4>
+            <div className="space-y-2">
+              <Label className="text-sm">اسم شخصي على البطاقة</Label>
+              <Input
+                placeholder="مثال: أبو محمد، العائلة الكريمة..."
+                value={customName}
+                onChange={e => setCustomName(e.target.value)}
+                className="border-2 focus:border-emerald-500"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label className="text-sm">رسالة خاصة</Label>
+              <Textarea
+                placeholder="مثال: تقبل الله منا ومنكم..."
+                value={customMessage}
+                onChange={e => setCustomMessage(e.target.value)}
+                className="border-2 focus:border-emerald-500 resize-none"
+                rows={2}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Right: Preview & Copy */}
+        <div className="space-y-4">
+          {/* Selected info */}
+          <div className="bg-emerald-50 dark:bg-emerald-900/20 rounded-2xl p-4 border border-emerald-200 dark:border-emerald-800">
+            <div className="flex items-center justify-between mb-3">
+              <h4 className="font-semibold text-emerald-800 dark:text-emerald-300">البرومبت الجاهز</h4>
+              <div className="flex gap-2">
+                <span className="text-xs bg-emerald-200 dark:bg-emerald-800 text-emerald-800 dark:text-emerald-200 px-2 py-1 rounded-full">
+                  {selectedPrompt.emoji} {selectedPrompt.category}
+                </span>
+                <span className="text-xs bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-2 py-1 rounded-full">
+                  {selectedSize.icon} {selectedSize.name}
+                </span>
+              </div>
+            </div>
+            <div className="bg-white dark:bg-gray-800 rounded-xl p-4 text-sm text-gray-700 dark:text-gray-300 leading-relaxed border border-gray-200 dark:border-gray-700 min-h-[140px] whitespace-pre-wrap">
+              {buildFinalPrompt()}
+            </div>
+          </div>
+
+          {/* Tips */}
+          <div className="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4 border border-blue-200 dark:border-blue-800">
+            <h5 className="font-semibold text-blue-800 dark:text-blue-300 mb-2 text-sm">💡 نصائح لهذا البرومبت</h5>
+            <ul className="space-y-1">
+              {selectedPrompt.tips.map((tip, idx) => (
+                <li key={idx} className="text-xs text-blue-700 dark:text-blue-300 flex items-start gap-2">
+                  <span className="text-blue-500 mt-0.5">•</span>
+                  {tip}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Size info */}
+          <div className="bg-gray-50 dark:bg-gray-800/50 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
+            <h5 className="font-semibold text-gray-700 dark:text-gray-300 mb-2 text-sm">📐 معلومات المقاس</h5>
+            <div className="grid grid-cols-3 gap-3 text-center">
+              <div>
+                <p className="text-xs text-gray-500">الأبعاد</p>
+                <p className="font-bold text-gray-800 dark:text-gray-200 text-sm">{selectedSize.dimensions}</p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500">النسبة</p>
+                <p className="font-bold text-emerald-600 text-sm">{selectedSize.aspectRatio}</p>
+              </div>
+              <div>
+                <p className="text-xs text-gray-500">المنصة</p>
+                <p className="font-bold text-gray-800 dark:text-gray-200 text-sm">{selectedSize.platform}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex gap-3">
+            <Button
+              onClick={copyPrompt}
+              className={`flex-1 py-6 font-bold text-base rounded-xl transition-all ${
+                copiedPrompt
+                  ? 'bg-green-500 hover:bg-green-600 text-white'
+                  : 'bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white shadow-lg shadow-emerald-500/30'
+              }`}
+            >
+              {copiedPrompt ? (
+                <><Check className="w-5 h-5 ml-2" />تم النسخ!</>
+              ) : (
+                <><Copy className="w-5 h-5 ml-2" />انسخ البرومبت</>  
+              )}
+            </Button>
+            <Button
+              variant="outline"
+              onClick={sharePrompt}
+              className="px-4 border-2 border-emerald-500 text-emerald-600 hover:bg-emerald-50"
+            >
+              <Share2 className="w-5 h-5" />
+            </Button>
+          </div>
+
+          <p className="text-center text-xs text-gray-400">
+            بعد النسخ، افتح <strong>نانو بنانا</strong> والصق البرومبت في خانة الوصف
+          </p>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 // Classic Eid Messages
 const eidMessages = [
@@ -420,9 +651,7 @@ function NanoBananaCardSection() {
               </div>
             </div>
 
-
-
-            {/* Design Selection */}
+                        {/* Design Selection */}
             <div className="space-y-2">
               <Label className="text-sm font-medium">التصميم</Label>
               <div className="grid grid-cols-3 gap-3">
@@ -504,17 +733,7 @@ function NanoBananaCardSection() {
                 </div>
               )}
 
-              {/* Poem */}
-              {currentPoem && (
-                <div className={`${currentDesign.accent} rounded-2xl p-4 backdrop-blur-sm space-y-1`}>
-                  <p className={`${currentDesign.textColor} text-sm opacity-70 mb-2`}>{currentPoem.title}</p>
-                  {currentPoem.verses.map((verse, idx) => (
-                    <p key={idx} className={`${currentDesign.textColor} text-sm leading-relaxed font-medium`}>
-                      {verse}
-                    </p>
-                  ))}
-                </div>
-              )}
+
 
               {/* Sender */}
               <div className={`${currentDesign.textColor} opacity-90`}>
@@ -535,7 +754,7 @@ function NanoBananaCardSection() {
                 variant="outline" 
                 className="flex-1 border-2"
                 onClick={() => {
-                  const cardData = { to, from, message, poem: currentPoem?.verses || [], designId: selectedDesign }
+                  const cardData = { to, from, message, poem: [], designId: selectedDesign }
                   shareCard(cardData as NanoCard)
                 }}
               >
@@ -597,31 +816,7 @@ function NanoBananaCardSection() {
         </div>
       )}
 
-      {/* Poem Modal */}
-      {showPoemModal && selectedPoem !== null && (
-        <Dialog open={showPoemModal} onOpenChange={setShowPoemModal}>
-          <DialogContent className="max-w-md">
-            <DialogHeader>
-              <DialogTitle className="text-center text-emerald-700 dark:text-emerald-300">
-                {almalkiPoems[selectedPoem].title}
-              </DialogTitle>
-            </DialogHeader>
-            <div className="space-y-3 text-center py-4">
-              {almalkiPoems[selectedPoem].verses.map((verse, idx) => (
-                <p key={idx} className="text-lg text-gray-700 dark:text-gray-300 font-medium leading-relaxed">
-                  {verse}
-                </p>
-              ))}
-            </div>
-            <Button 
-              onClick={() => setShowPoemModal(false)}
-              className="w-full bg-emerald-600 hover:bg-emerald-700"
-            >
-              اختيار هذا القصيد
-            </Button>
-          </DialogContent>
-        </Dialog>
-      )}
+
     </div>
   )
 }
@@ -1272,10 +1467,9 @@ function App() {
                 ))}
               </div>
             </TabsContent>
-
-            {/* Prompts Tab */}
+            {/* Nano Banana Prompts Tab */}
             <TabsContent value="prompts" className="space-y-6">
-              <PromptTemplatesSection />
+              <NanoBananaPromptsSection />
             </TabsContent>
           </Tabs>
         </main>
@@ -1305,16 +1499,22 @@ function App() {
                 </ul>
               </div>
               <div>
-                <h4 className="font-semibold mb-4">عن المنصة</h4>
-                <p className="text-emerald-200 text-sm">
-                  منصة عيدية متكاملة لتجربة عيد فطر مميزة وسعيدة
+                <h4 className="font-semibold mb-4">عن الموقع</h4>
+                <p className="text-emerald-200 text-sm mb-3">
+                  منصة عيد الفطر السعودي المتكاملة
+                </p>
+                <p className="text-emerald-300 text-xs">
+                  كل ما تحتاجه لعيد سعيد في مكان واحد
                 </p>
               </div>
             </div>
             <Separator className="my-6 bg-emerald-800" />
-            <div className="text-center">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-4">
               <p className="text-sm text-emerald-300">
-                2025 عيدية - منصة العيد السعودي المتكاملة
+                2025 عيدية - منصة العيد السعودي
+              </p>
+              <p className="text-sm text-emerald-400">
+                منصة العيد السعودي 🌙
               </p>
             </div>
           </div>
