@@ -18,6 +18,8 @@ import { Separator } from '@/components/ui/separator'
 import { toast } from 'sonner'
 import { useAuth } from '@/_core/hooks/useAuth'
 import { getLoginUrl } from '@/const'
+import { trpc } from '@/lib/trpc'
+import { Loader } from 'lucide-react'
 
 // Types
 interface EidiyahEntry {
@@ -201,6 +203,10 @@ function NanoBananaPromptsSection() {
   const [customName, setCustomName] = useState('')
   const [customMessage, setCustomMessage] = useState('')
   const [copiedPrompt, setCopiedPrompt] = useState(false)
+  const [generatedImageUrl, setGeneratedImageUrl] = useState<string | null>(null)
+  const [isGenerating, setIsGenerating] = useState(false)
+  
+  const generateImageMutation = trpc.image.generate.useMutation()
 
   const buildFinalPrompt = () => {
     let finalPrompt = selectedPrompt.prompt
@@ -228,6 +234,23 @@ function NanoBananaPromptsSection() {
       }
     } else {
       copyPrompt()
+    }
+  }
+
+  const handleGenerateImage = async () => {
+    const prompt = buildFinalPrompt()
+    setIsGenerating(true)
+    try {
+      const result = await generateImageMutation.mutateAsync({ prompt })
+      if (result.success && result.url) {
+        setGeneratedImageUrl(result.url)
+        toast.success('تم توليد الصورة بنجاح!')
+      }
+    } catch (error) {
+      console.error('Error generating image:', error)
+      toast.error('فشل توليد الصورة. يرجى المحاولة مرة أخرى.')
+    } finally {
+      setIsGenerating(false)
     }
   }
 
@@ -403,32 +426,56 @@ function NanoBananaPromptsSection() {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex gap-3">
+          <div className="flex flex-col gap-3">
+            <div className="flex gap-3">
+              <Button
+                onClick={copyPrompt}
+                className={`flex-1 py-6 font-bold text-base rounded-xl transition-all ${
+                  copiedPrompt
+                    ? 'bg-green-500 hover:bg-green-600 text-white'
+                    : 'bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white shadow-lg shadow-emerald-500/30'
+                }`}
+              >
+                {copiedPrompt ? (
+                  <><Check className="w-5 h-5 ml-2" />تم النسخ!</>
+                ) : (
+                  <><Copy className="w-5 h-5 ml-2" />انسخ البرومبت</>  
+                )}
+              </Button>
+              <Button
+                variant="outline"
+                onClick={sharePrompt}
+                className="px-4 border-2 border-emerald-500 text-emerald-600 hover:bg-emerald-50"
+              >
+                <Share2 className="w-5 h-5" />
+              </Button>
+            </div>
+            
             <Button
-              onClick={copyPrompt}
-              className={`flex-1 py-6 font-bold text-base rounded-xl transition-all ${
-                copiedPrompt
-                  ? 'bg-green-500 hover:bg-green-600 text-white'
-                  : 'bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-600 hover:to-teal-600 text-white shadow-lg shadow-emerald-500/30'
-              }`}
+              onClick={handleGenerateImage}
+              disabled={isGenerating}
+              className="w-full py-6 font-bold text-base rounded-xl bg-gradient-to-r from-violet-500 to-purple-500 hover:from-violet-600 hover:to-purple-600 text-white shadow-lg shadow-violet-500/30 transition-all disabled:opacity-50"
             >
-              {copiedPrompt ? (
-                <><Check className="w-5 h-5 ml-2" />تم النسخ!</>
+              {isGenerating ? (
+                <><Loader className="w-5 h-5 ml-2 animate-spin" />جاري توليد الصورة...</>
               ) : (
-                <><Copy className="w-5 h-5 ml-2" />انسخ البرومبت</>  
+                <><Sparkles className="w-5 h-5 ml-2" />توليد الصورة مباشرة</>
               )}
-            </Button>
-            <Button
-              variant="outline"
-              onClick={sharePrompt}
-              className="px-4 border-2 border-emerald-500 text-emerald-600 hover:bg-emerald-50"
-            >
-              <Share2 className="w-5 h-5" />
             </Button>
           </div>
 
+          {generatedImageUrl && (
+            <div className="rounded-xl overflow-hidden border-2 border-violet-200 dark:border-violet-800">
+              <img 
+                src={generatedImageUrl} 
+                alt="Generated Eid Card" 
+                className="w-full h-auto"
+              />
+            </div>
+          )}
+
           <p className="text-center text-xs text-gray-400">
-            بعد النسخ، افتح <strong>نانو بنانا</strong> والصق البرومبت في خانة الوصف
+            يمكنك نسخ البرومبت والصقه في نانو بنانا، أو استخدام زر توليد الصورة مباشرة
           </p>
         </div>
       </div>
@@ -821,7 +868,7 @@ function NanoBananaCardSection() {
 export default function Home() {
   const [activeTab, setActiveTab] = useState('cards')
   const [darkMode, setDarkMode] = useState(false)
-  const { isAuthenticated, logout } = useAuth()
+  const { user, isAuthenticated, logout } = useAuth()
   
   // Eidiyah Calculator State
   const [eidiyahEntries, setEidiyahEntries] = useState<EidiyahEntry[]>([])
