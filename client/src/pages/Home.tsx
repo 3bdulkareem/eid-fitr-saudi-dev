@@ -20,6 +20,7 @@ import { useAuth } from '@/_core/hooks/useAuth'
 import { getLoginUrl } from '@/const'
 import { trpc } from '@/lib/trpc'
 import { Loader } from 'lucide-react'
+import { eidGamesData } from '@/data/eidGames'
 
 // Types
 interface EidiyahEntry {
@@ -1091,6 +1092,10 @@ export default function Home() {
                 <ChefHat className="w-4 h-4 ml-2" />
                 وصفات العيد
               </TabsTrigger>
+              <TabsTrigger value="games" className="flex-1 min-w-[120px] data-[state=active]:bg-emerald-600 data-[state=active]:text-white">
+                <Music className="w-4 h-4 ml-2" />
+                ألعاب العيد
+              </TabsTrigger>
               <TabsTrigger value="prompts" className="flex-1 min-w-[120px] data-[state=active]:bg-emerald-600 data-[state=active]:text-white">
                 <Zap className="w-4 h-4 ml-2" />
                 برومبتات نانو بنانا
@@ -1528,6 +1533,92 @@ export default function Home() {
                             <MapPin className="w-3 h-3 ml-1" />
                             {recipe.region}
                           </Badge>
+                        </div>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                ))}
+              </div>
+            </TabsContent>
+            {/* Eid Games Tab */}
+            <TabsContent value="games" className="space-y-6">
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {eidGamesData.map((game) => (
+                  <Dialog key={game.id}>
+                    <DialogTrigger asChild>
+                      <Card className="cursor-pointer border-emerald-100 dark:border-emerald-800 hover:shadow-xl transition group overflow-hidden">
+                        <div className="h-40 bg-gradient-to-br from-emerald-100 to-amber-100 dark:from-emerald-900/30 dark:to-amber-900/30 flex items-center justify-center group-hover:scale-105 transition">
+                          <div className="text-6xl">{game.emoji}</div>
+                        </div>
+                        <CardHeader>
+                          <CardTitle className="text-lg">{game.name}</CardTitle>
+                          <CardDescription>{game.description}</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="flex items-center justify-between text-sm text-gray-600 dark:text-gray-400">
+                            <span className="flex items-center gap-1">
+                              <Users className="w-4 h-4" />
+                              {game.players}
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <Clock className="w-4 h-4" />
+                              {game.duration}
+                            </span>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </DialogTrigger>
+                    <DialogContent className="max-w-2xl max-h-[80vh] overflow-y-auto">
+                      <DialogHeader>
+                        <DialogTitle className="text-2xl flex items-center gap-3">
+                          <span className="text-4xl">{game.emoji}</span>
+                          {game.name}
+                        </DialogTitle>
+                      </DialogHeader>
+                      <div className="space-y-6">
+                        <p className="text-gray-600 dark:text-gray-300">{game.description}</p>
+                        
+                        <div>
+                          <h4 className="font-semibold text-emerald-700 dark:text-emerald-300 mb-3 flex items-center gap-2">
+                            <Flame className="w-5 h-5" />
+                            المتطلبات
+                          </h4>
+                          <ul className="space-y-2">
+                            {game.requirements.map((req, idx) => (
+                              <li key={idx} className="flex items-start gap-2 text-sm">
+                                <span className="w-2 h-2 bg-emerald-500 rounded-full mt-1.5" />
+                                {req}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        
+                        <div>
+                          <h4 className="font-semibold text-emerald-700 dark:text-emerald-300 mb-3 flex items-center gap-2">
+                            <Star className="w-5 h-5" />
+                            القواعس
+                          </h4>
+                          <ol className="space-y-3">
+                            {game.rules.map((rule, idx) => (
+                              <li key={idx} className="flex gap-3 text-sm">
+                                <span className="flex-shrink-0 w-6 h-6 bg-emerald-100 dark:bg-emerald-900 text-emerald-700 dark:text-emerald-300 rounded-full flex items-center justify-center text-xs font-semibold">
+                                  {idx + 1}
+                                </span>
+                                <span className="text-gray-700 dark:text-gray-300">{rule}</span>
+                              </li>
+                            ))}
+                          </ol>
+                        </div>
+                        
+                        <div className="pt-4 border-t border-gray-200 dark:border-gray-700 grid grid-cols-2 gap-4">
+                          <div>
+                            <p className="text-xs text-gray-500 mb-1">عدد اللاعبين</p>
+                            <p className="font-bold text-emerald-600 dark:text-emerald-400">{game.players}</p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-gray-500 mb-1">المدة الزمنية</p>
+                            <p className="font-bold text-emerald-600 dark:text-emerald-400">{game.duration}</p>
+                          </div>
                         </div>
                       </div>
                     </DialogContent>
