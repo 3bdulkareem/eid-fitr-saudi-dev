@@ -1499,22 +1499,32 @@ function App() {
                 </ul>
               </div>
               <div>
-                <h4 className="font-semibold mb-4">عن الموقع</h4>
-                <p className="text-emerald-200 text-sm mb-3">
-                  منصة عيد الفطر السعودي المتكاملة
+                <h4 className="font-semibold mb-4">عن المصمم</h4>
+                <p className="text-emerald-100 text-sm font-semibold mb-1">عبدالكريم المالكي</p>
+                <p className="text-emerald-300 text-xs mb-3">خبير التقنيات التفاعلية والغامرة</p>
+                <p className="text-emerald-200 text-xs mb-4 leading-relaxed">
+                  صمم هذا الموقع بكل حب وتفانٍ لخدمة المجتمع السعودي في عيد الفطر المبارك، ليجمع بين الأصالة السعودية والتقنيات الحديثة في تجربة تفاعلية فريدة
                 </p>
-                <p className="text-emerald-300 text-xs">
-                  كل ما تحتاجه لعيد سعيد في مكان واحد
-                </p>
+                <a
+                  href="https://linkedin.com/in/3bdulkareem"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1.5 rounded-lg transition-colors"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                  </svg>
+                  تواصل على LinkedIn
+                </a>
               </div>
             </div>
             <Separator className="my-6 bg-emerald-800" />
             <div className="flex flex-col md:flex-row items-center justify-between gap-4">
               <p className="text-sm text-emerald-300">
-                2025 عيدية - منصة العيد السعودي
+                © 2025 عيدية - منصة العيد السعودي
               </p>
               <p className="text-sm text-emerald-400">
-                منصة العيد السعودي 🌙
+                صمم بإبداع بواسطة <a href="https://linkedin.com/in/3bdulkareem" target="_blank" rel="noopener noreferrer" className="text-amber-400 hover:text-amber-300 transition-colors">عبدالكريم المالكي</a> 🌙
               </p>
             </div>
           </div>
