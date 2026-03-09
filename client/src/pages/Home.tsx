@@ -16,11 +16,15 @@ import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
 import { Separator } from '@/components/ui/separator'
 import { toast } from 'sonner'
-import { eidGamesData } from '@/data/eidGames'
+import { useAuth } from '@/_core/hooks/useAuth'
 import { getLoginUrl } from '@/const'
 import { trpc } from '@/lib/trpc'
 import { Loader } from 'lucide-react'
 import { eidGamesData } from '@/data/eidGames'
+import { giftsData } from '@/data/gifts'
+import { photographyTips, memoryIdeas } from '@/data/photography'
+import { familyActivities, familyStories } from '@/data/familyActivities'
+import { quizQuestions, proverbs, wisdomQuotes, funFacts } from '@/data/culturalQuiz'
 
 // Types
 interface EidiyahEntry {
@@ -887,7 +891,7 @@ export default function Home() {
   const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 })
 
   useEffect(() => {
-    const targetDate = new Date('2025-03-30T00:00:00').getTime()
+    const targetDate = new Date('2026-03-20T00:00:00').getTime()
     
     const interval = setInterval(() => {
       const now = new Date().getTime()
@@ -1099,6 +1103,22 @@ export default function Home() {
               <TabsTrigger value="prompts" className="flex-1 min-w-[120px] data-[state=active]:bg-emerald-600 data-[state=active]:text-white">
                 <Zap className="w-4 h-4 ml-2" />
                 برومبتات نانو بنانا
+              </TabsTrigger>
+              <TabsTrigger value="gifts" className="flex-1 min-w-[120px] data-[state=active]:bg-emerald-600 data-[state=active]:text-white">
+                <Gift className="w-4 h-4 ml-2" />
+                هدايا وتذكارات
+              </TabsTrigger>
+              <TabsTrigger value="photography" className="flex-1 min-w-[120px] data-[state=active]:bg-emerald-600 data-[state=active]:text-white">
+                <Sparkles className="w-4 h-4 ml-2" />
+                التصوير والذكريات
+              </TabsTrigger>
+              <TabsTrigger value="family" className="flex-1 min-w-[120px] data-[state=active]:bg-emerald-600 data-[state=active]:text-white">
+                <Users className="w-4 h-4 ml-2" />
+                الأطفال والعائلة
+              </TabsTrigger>
+              <TabsTrigger value="cultural" className="flex-1 min-w-[120px] data-[state=active]:bg-emerald-600 data-[state=active]:text-white">
+                <Star className="w-4 h-4 ml-2" />
+                المسابقات الثقافية
               </TabsTrigger>
             </TabsList>
 
@@ -1629,6 +1649,354 @@ export default function Home() {
             {/* Nano Banana Prompts Tab */}
             <TabsContent value="prompts" className="space-y-6">
               <NanoBananaPromptsSection />
+            </TabsContent>
+            
+            {/* Gifts Tab */}
+            <TabsContent value="gifts" className="space-y-6">
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {giftsData.map((gift) => (
+                  <Dialog key={gift.id}>
+                    <DialogTrigger asChild>
+                      <Card className="cursor-pointer border-emerald-100 dark:border-emerald-800 hover:shadow-xl transition group overflow-hidden">
+                        <div className="h-40 bg-gradient-to-br from-pink-100 to-rose-100 dark:from-pink-900/30 dark:to-rose-900/30 flex items-center justify-center group-hover:scale-105 transition">
+                          <div className="text-6xl">{gift.emoji}</div>
+                        </div>
+                        <CardHeader>
+                          <CardTitle className="text-lg">{gift.name}</CardTitle>
+                          <CardDescription>{gift.description}</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="flex items-center justify-between">
+                            <Badge variant="outline" className="bg-pink-50 text-pink-700 border-pink-200">
+                              {gift.price_range}
+                            </Badge>
+                            <Badge variant="outline" className="bg-rose-50 text-rose-700 border-rose-200">
+                              {gift.category}
+                            </Badge>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </DialogTrigger>
+                    <DialogContent className="max-h-[80vh] overflow-y-auto">
+                      <DialogHeader>
+                        <DialogTitle className="flex items-center gap-2 text-2xl">
+                          <span className="text-4xl">{gift.emoji}</span>
+                          {gift.name}
+                        </DialogTitle>
+                      </DialogHeader>
+                      <div className="space-y-4">
+                        <div>
+                          <p className="text-gray-700 dark:text-gray-300">{gift.description}</p>
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <h4 className="font-semibold text-pink-700 dark:text-pink-300 mb-2">السعر</h4>
+                            <p className="text-sm">{gift.price_range}</p>
+                          </div>
+                          <div>
+                            <h4 className="font-semibold text-pink-700 dark:text-pink-300 mb-2">الفئة</h4>
+                            <p className="text-sm">{gift.category}</p>
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <h4 className="font-semibold text-pink-700 dark:text-pink-300 mb-2">أماكن الشراء</h4>
+                          <p className="text-sm">{gift.where_to_buy}</p>
+                        </div>
+                        
+                        <div>
+                          <h4 className="font-semibold text-pink-700 dark:text-pink-300 mb-3">نصائح مهمة</h4>
+                          <ul className="space-y-2">
+                            {gift.tips.map((tip, idx) => (
+                              <li key={idx} className="flex items-start gap-2 text-sm">
+                                <span className="w-2 h-2 bg-pink-500 rounded-full mt-1.5" />
+                                {tip}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                ))}
+              </div>
+            </TabsContent>
+            
+            {/* Photography Tab */}
+            <TabsContent value="photography" className="space-y-6">
+              <div className="space-y-8">
+                <div>
+                  <h3 className="text-2xl font-bold text-emerald-700 dark:text-emerald-300 mb-6">نصائح التصوير الفوتوغرافي</h3>
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {photographyTips.map((tip) => (
+                      <Card key={tip.id} className="border-blue-100 dark:border-blue-800 hover:shadow-lg transition">
+                        <CardHeader>
+                          <CardTitle className="flex items-center gap-2 text-lg">
+                            <span className="text-3xl">{tip.emoji}</span>
+                            {tip.title}
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                          <p className="text-sm text-gray-700 dark:text-gray-300">{tip.description}</p>
+                          <div className="space-y-2">
+                            {tip.tips.map((t, idx) => (
+                              <div key={idx} className="flex items-start gap-2 text-sm">
+                                <span className="w-2 h-2 bg-blue-500 rounded-full mt-1.5" />
+                                <span>{t}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+                
+                <Separator />
+                
+                <div>
+                  <h3 className="text-2xl font-bold text-emerald-700 dark:text-emerald-300 mb-6">أفكار حفظ الذكريات</h3>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    {memoryIdeas.map((idea) => (
+                      <Card key={idea.id} className="border-purple-100 dark:border-purple-800 hover:shadow-lg transition">
+                        <CardHeader>
+                          <CardTitle className="flex items-center gap-2">
+                            <span className="text-3xl">{idea.emoji}</span>
+                            {idea.name}
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                          <p className="text-sm text-gray-700 dark:text-gray-300">{idea.description}</p>
+                          <div className="space-y-2">
+                            <h5 className="font-semibold text-purple-700 dark:text-purple-300 text-sm">الخطوات:</h5>
+                            {idea.how_to.map((step, idx) => (
+                              <div key={idx} className="flex gap-2 text-sm">
+                                <span className="flex-shrink-0 w-5 h-5 bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 rounded-full flex items-center justify-center text-xs font-semibold">
+                                  {idx + 1}
+                                </span>
+                                <span>{step}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+            
+            {/* Family Activities Tab */}
+            <TabsContent value="family" className="space-y-6">
+              <div className="space-y-8">
+                <div>
+                  <h3 className="text-2xl font-bold text-emerald-700 dark:text-emerald-300 mb-6">أنشطة عائلية ممتعة</h3>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    {familyActivities.map((activity) => (
+                      <Card key={activity.id} className="border-orange-100 dark:border-orange-800 hover:shadow-lg transition">
+                        <CardHeader>
+                          <CardTitle className="flex items-center gap-2">
+                            <span className="text-3xl">{activity.emoji}</span>
+                            {activity.name}
+                          </CardTitle>
+                          <CardDescription>{activity.description}</CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                          <div className="grid grid-cols-2 gap-2 text-sm">
+                            <div>
+                              <p className="text-gray-500 text-xs">الفئة العمرية</p>
+                              <p className="font-semibold text-orange-700 dark:text-orange-300">{activity.age_group}</p>
+                            </div>
+                            <div>
+                              <p className="text-gray-500 text-xs">المدة</p>
+                              <p className="font-semibold text-orange-700 dark:text-orange-300">{activity.duration}</p>
+                            </div>
+                          </div>
+                          <details className="text-sm">
+                            <summary className="cursor-pointer font-semibold text-orange-700 dark:text-orange-300">المواد المطلوبة</summary>
+                            <ul className="mt-2 space-y-1 ml-4">
+                              {activity.materials.map((m, idx) => (
+                                <li key={idx} className="text-gray-700 dark:text-gray-300">• {m}</li>
+                              ))}
+                            </ul>
+                          </details>
+                          <details className="text-sm">
+                            <summary className="cursor-pointer font-semibold text-orange-700 dark:text-orange-300">خطوات التنفيذ</summary>
+                            <ol className="mt-2 space-y-1 ml-4 list-decimal">
+                              {activity.steps.map((step, idx) => (
+                                <li key={idx} className="text-gray-700 dark:text-gray-300">{step}</li>
+                              ))}
+                            </ol>
+                          </details>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+                
+                <Separator />
+                
+                <div>
+                  <h3 className="text-2xl font-bold text-emerald-700 dark:text-emerald-300 mb-6">قصص عيدية جميلة</h3>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    {familyStories.map((story) => (
+                      <Card key={story.id} className="border-indigo-100 dark:border-indigo-800 hover:shadow-lg transition">
+                        <CardHeader>
+                          <CardTitle className="flex items-center gap-2">
+                            <span className="text-3xl">{story.emoji}</span>
+                            {story.title}
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                          <div>
+                            <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">{story.content}</p>
+                          </div>
+                          <div className="pt-3 border-t border-indigo-100 dark:border-indigo-800">
+                            <p className="text-xs text-gray-500 mb-1">الفئة العمرية</p>
+                            <Badge className="bg-indigo-100 text-indigo-700 dark:bg-indigo-900 dark:text-indigo-300">
+                              {story.age_group}
+                            </Badge>
+                          </div>
+                          <div className="bg-indigo-50 dark:bg-indigo-900/20 p-3 rounded-lg">
+                            <p className="text-xs text-gray-500 mb-1">الدرس المستفاد</p>
+                            <p className="text-sm font-semibold text-indigo-700 dark:text-indigo-300">{story.moral}</p>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </TabsContent>
+            
+            {/* Cultural Quiz Tab */}
+            <TabsContent value="cultural" className="space-y-6">
+              <div className="space-y-8">
+                {/* Quiz Questions */}
+                <div>
+                  <h3 className="text-2xl font-bold text-emerald-700 dark:text-emerald-300 mb-6">🎯 أسئلة ثقافية</h3>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    {quizQuestions.map((q) => (
+                      <Card key={q.id} className="border-teal-100 dark:border-teal-800 hover:shadow-lg transition">
+                        <CardHeader>
+                          <CardTitle className="text-lg">{q.question}</CardTitle>
+                          <CardDescription className="flex gap-2 mt-2">
+                            <Badge className="bg-teal-100 text-teal-700 dark:bg-teal-900 dark:text-teal-300">
+                              {q.difficulty === 'easy' ? 'سهل' : q.difficulty === 'medium' ? 'متوسط' : 'صعب'}
+                            </Badge>
+                            <Badge className="bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300">
+                              {q.category === 'general' ? 'عام' : q.category === 'saudi' ? 'سعودي' : q.category === 'islamic' ? 'إسلامي' : 'عربي'}
+                            </Badge>
+                          </CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                          <div className="space-y-2">
+                            {q.options.map((option, idx) => (
+                              <div key={idx} className={`p-2 rounded border-2 cursor-pointer transition ${
+                                idx === q.correctAnswer 
+                                  ? 'border-green-500 bg-green-50 dark:bg-green-900/20' 
+                                  : 'border-gray-200 dark:border-gray-700 hover:border-teal-300'
+                              }`}>
+                                <span className="text-sm font-medium">{option}</span>
+                              </div>
+                            ))}
+                          </div>
+                          <div className="pt-3 border-t border-teal-100 dark:border-teal-800 bg-teal-50 dark:bg-teal-900/20 p-3 rounded">
+                            <p className="text-xs text-gray-500 mb-1">الإجابة الصحيحة والشرح</p>
+                            <p className="text-sm text-teal-700 dark:text-teal-300">{q.explanation}</p>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+                
+                <Separator />
+                
+                {/* Proverbs */}
+                <div>
+                  <h3 className="text-2xl font-bold text-emerald-700 dark:text-emerald-300 mb-6">💬 حكم وأمثال عربية</h3>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    {proverbs.map((p) => (
+                      <Card key={p.id} className="border-amber-100 dark:border-amber-800 hover:shadow-lg transition">
+                        <CardHeader>
+                          <CardTitle className="flex items-center gap-2">
+                            <span className="text-3xl">{p.emoji}</span>
+                            <span className="text-lg">{p.proverb}</span>
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                          <div>
+                            <p className="text-xs text-gray-500 mb-1">المعنى</p>
+                            <p className="text-sm text-gray-700 dark:text-gray-300">{p.meaning}</p>
+                          </div>
+                          <div className="pt-3 border-t border-amber-100 dark:border-amber-800">
+                            <p className="text-xs text-gray-500 mb-1">الأصل</p>
+                            <p className="text-sm font-semibold text-amber-700 dark:text-amber-300">{p.origin}</p>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+                
+                <Separator />
+                
+                {/* Wisdom Quotes */}
+                <div>
+                  <h3 className="text-2xl font-bold text-emerald-700 dark:text-emerald-300 mb-6">✨ حكم وحكمات</h3>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    {wisdomQuotes.map((w) => (
+                      <Card key={w.id} className="border-purple-100 dark:border-purple-800 hover:shadow-lg transition">
+                        <CardHeader>
+                          <CardTitle className="flex items-center gap-2">
+                            <span className="text-3xl">{w.emoji}</span>
+                            <span className="text-lg">حكمة</span>
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-3">
+                          <div className="bg-purple-50 dark:bg-purple-900/20 p-4 rounded-lg">
+                            <p className="text-sm italic text-purple-900 dark:text-purple-100">"{w.quote}"</p>
+                          </div>
+                          <div className="grid grid-cols-2 gap-3">
+                            <div>
+                              <p className="text-xs text-gray-500 mb-1">القائل</p>
+                              <p className="text-sm font-semibold text-purple-700 dark:text-purple-300">{w.author}</p>
+                            </div>
+                            <div>
+                              <p className="text-xs text-gray-500 mb-1">الفئة</p>
+                              <p className="text-sm font-semibold text-purple-700 dark:text-purple-300">{w.category}</p>
+                            </div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+                
+                <Separator />
+                
+                {/* Fun Facts */}
+                <div>
+                  <h3 className="text-2xl font-bold text-emerald-700 dark:text-emerald-300 mb-6">🌟 حقائق مثيرة للاهتمام</h3>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    {funFacts.map((fact) => (
+                      <Card key={fact.id} className="border-rose-100 dark:border-rose-800 hover:shadow-lg transition">
+                        <CardHeader>
+                          <CardTitle className="flex items-center gap-2">
+                            <span className="text-3xl">{fact.emoji}</span>
+                            {fact.title}
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed">{fact.fact}</p>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+              </div>
             </TabsContent>
           </Tabs>
         </main>
