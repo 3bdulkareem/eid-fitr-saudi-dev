@@ -2028,7 +2028,7 @@ export default function Home() {
                 <p className="text-emerald-100 text-sm font-semibold mb-1">عبدالكريم المالكي</p>
                 <p className="text-emerald-300 text-xs mb-3">خبير التقنيات التفاعلية والغامرة</p>
                 <p className="text-emerald-200 text-xs mb-4 leading-relaxed">
-                  صمم هذا الموقع بكل حب وتفانٍ لخدمة المجتمع السعودي في عيد الفطر المبارك، ليجمع بين الأصالة السعودية والتقنيات الحديثة في تجربة تفاعلية فريدة
+                  منصة متكاملة لتجعل عيدك أجمل وأسهل، مع أدوات عملية وتجربة مستخدم ممتعة
                 </p>
                 <a
                   href="https://linkedin.com/in/3bdulkareem"
