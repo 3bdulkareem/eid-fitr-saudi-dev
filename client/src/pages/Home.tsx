@@ -766,34 +766,34 @@ function NanoBananaCardSection() {
             </div>
 
             {/* Card Content */}
-            <div className="relative z-10 text-center space-y-6">
-              {/* Header */}
-              <div className="space-y-2">
-                <div className="text-5xl mb-2">{currentDesign.decoration}</div>
-                <h2 className={`text-3xl font-bold ${currentDesign.textColor}`}>عيد مبارك</h2>
-                <div className={`w-20 h-1 mx-auto rounded-full ${currentDesign.accent}`} />
-              </div>
+            <div className="relative z-10 text-center space-y-8 flex flex-col justify-center h-full">
+              {/* Decoration */}
+              <div className="text-6xl">{currentDesign.decoration}</div>
 
-              {/* Recipient */}
-              <div className={`text-xl ${currentDesign.textColor} opacity-90`}>
-                إلى: <span className="font-bold">{to || '...'}</span>
-              </div>
+              {/* Main Message - Direct Display */}
+              <div className="space-y-6">
+                {/* Message Content */}
+                {message ? (
+                  <div className="space-y-4">
+                    <p className={`${currentDesign.textColor} text-2xl font-bold leading-relaxed`}>
+                      {message}
+                    </p>
+                  </div>
+                ) : (
+                  <p className={`${currentDesign.textColor} text-2xl opacity-50`}>أدخل رسالتك...</p>
+                )}
 
-              {/* Message */}
-              {message && (
-                <div className={`${currentDesign.accent} rounded-2xl p-4 backdrop-blur-sm`}>
-                  <p className={`${currentDesign.textColor} text-lg leading-relaxed`}>{message}</p>
+                {/* Sender and Recipient - Minimal */}
+                <div className="flex justify-between items-center pt-6 border-t border-white/20">
+                  <div className={`${currentDesign.textColor} text-sm opacity-80`}>
+                    <span className="text-xs opacity-60">من</span><br />
+                    <span className="font-semibold">{from || '...'}</span>
+                  </div>
+                  <div className={`${currentDesign.textColor} text-sm opacity-80`}>
+                    <span className="text-xs opacity-60">إلى</span><br />
+                    <span className="font-semibold">{to || '...'}</span>
+                  </div>
                 </div>
-              )}
-
-              {/* Sender */}
-              <div className={`${currentDesign.textColor} opacity-90`}>
-                من: <span className="font-bold">{from || '...'}</span>
-              </div>
-
-              {/* Footer */}
-              <div className={`text-xs ${currentDesign.textColor} opacity-60 pt-4`}>
-                عيدية - منصة العيد السعودي 🌙
               </div>
             </div>
           </div>
