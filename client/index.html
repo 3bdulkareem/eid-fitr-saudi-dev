@@ -16,7 +16,72 @@
 
   <body>
     <div id="root"></div>
+    
+    <!-- حماية ضد DevTools وإخفاء الكود -->
+    <script>
+      // منع فتح DevTools
+      document.addEventListener('keydown', function(event) {
+        // منع F12
+        if (event.keyCode === 123) {
+          event.preventDefault();
+          return false;
+        }
+        // منع Ctrl+Shift+I (Windows/Linux)
+        if (event.ctrlKey && event.shiftKey && event.keyCode === 73) {
+          event.preventDefault();
+          return false;
+        }
+        // منع Ctrl+Shift+C (Inspect Element)
+        if (event.ctrlKey && event.shiftKey && event.keyCode === 67) {
+          event.preventDefault();
+          return false;
+        }
+        // منع Ctrl+Shift+J (Console)
+        if (event.ctrlKey && event.shiftKey && event.keyCode === 74) {
+          event.preventDefault();
+          return false;
+        }
+        // منع Cmd+Option+I (Mac)
+        if (event.metaKey && event.altKey && event.keyCode === 73) {
+          event.preventDefault();
+          return false;
+        }
+      });
+      
+      // منع الكلك اليميني (Right Click)
+      document.addEventListener('contextmenu', function(event) {
+        event.preventDefault();
+        return false;
+      });
+      
+      // كشف محاولات فتح DevTools
+      let devtools = { open: false, orientation: null };
+      const threshold = 160;
+      setInterval(function() {
+        if (window.outerHeight - window.innerHeight > threshold || window.outerWidth - window.innerWidth > threshold) {
+          if (!devtools.open) {
+            devtools.open = true;
+            devtools.orientation = null;
+          }
+          if (window.outerWidth - window.innerWidth > threshold) {
+            if (devtools.orientation !== 'vertical') {
+              devtools.orientation = 'vertical';
+            }
+          }
+          if (window.outerHeight - window.innerHeight > threshold) {
+            if (devtools.orientation !== 'horizontal') {
+              devtools.orientation = 'horizontal';
+            }
+          }
+        } else {
+          devtools.open = false;
+          devtools.orientation = null;
+        }
+      }, 500);
+    </script>
+    
     <script type="module" src="/src/main.tsx"></script>
+    <!-- Analytics Script - Minimal Info -->
     <script
       defer
       src="%VITE_ANALYTICS_ENDPOINT%/umami"

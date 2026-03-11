@@ -8,6 +8,20 @@ import App from "./App";
 import { getLoginUrl } from "./const";
 import "./index.css";
 
+// حماية إضافية: إخفاء console والأخطاء
+if (process.env.NODE_ENV === 'production') {
+  // إخفاء console.log والأخطاء
+  console.log = () => {};
+  console.error = () => {};
+  console.warn = () => {};
+  console.debug = () => {};
+  console.info = () => {};
+  
+  // منع عرض الأخطاء في الـ window
+  window.onerror = () => true;
+  window.onunhandledrejection = () => true;
+}
+
 const queryClient = new QueryClient();
 
 const redirectToLoginIfUnauthorized = (error: unknown) => {
@@ -25,7 +39,7 @@ queryClient.getQueryCache().subscribe(event => {
   if (event.type === "updated" && event.action.type === "error") {
     const error = event.query.state.error;
     redirectToLoginIfUnauthorized(error);
-    console.error("[API Query Error]", error);
+    // console.error("[API Query Error]", error); // مخفي في الإنتاج
   }
 });
 
@@ -33,7 +47,7 @@ queryClient.getMutationCache().subscribe(event => {
   if (event.type === "updated" && event.action.type === "error") {
     const error = event.mutation.state.error;
     redirectToLoginIfUnauthorized(error);
-    console.error("[API Mutation Error]", error);
+    // console.error("[API Mutation Error]", error); // مخفي في الإنتاج
   }
 });
 
