@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import html2canvas from 'html2canvas'
 import { 
   Gift, Calendar, MapPin, ChefHat, Sparkles, 
   Moon, Sun, Clock, Users, Heart, Share2,
@@ -69,9 +70,9 @@ interface Recipe {
 const nanoBananaDesigns = [
   { 
     id: 1, 
-    name: 'الذهبي الملكي',
+    name: '✨ الذهبي الملكي',
     bg: 'bg-cover bg-center',
-    bgImage: 'https://d2xsxph8kpxj0f.cloudfront.net/119893160/XYTkVdtKe78LAxqNrbimFo/eid-card-bg-1-gold-4GRYHbAaf8MDYa4ErKzJWd.webp',
+    bgImage: 'https://d2xsxph8kpxj0f.cloudfront.net/119893160/XYTkVdtKe78LAxqNrbimFo/eid-card-simple-1-gold-o29EtwgHt9fyzv2TwWwNSG.webp',
     accent: 'bg-white/80',
     shadow: 'shadow-lg',
     textColor: 'text-gray-800',
@@ -79,9 +80,9 @@ const nanoBananaDesigns = [
   },
   { 
     id: 2, 
-    name: 'الأخضر الزمردي',
+    name: '🌿 الأخضر الزمردي',
     bg: 'bg-cover bg-center',
-    bgImage: 'https://d2xsxph8kpxj0f.cloudfront.net/119893160/XYTkVdtKe78LAxqNrbimFo/eid-card-bg-2-emerald-BN6ybiHKGgJ8ZcvYTFz3sX.webp',
+    bgImage: 'https://d2xsxph8kpxj0f.cloudfront.net/119893160/XYTkVdtKe78LAxqNrbimFo/eid-card-simple-2-green-bpT9hpnKY8SwqaPAZHe3Dv.webp',
     accent: 'bg-white/80',
     shadow: 'shadow-lg',
     textColor: 'text-gray-800',
@@ -89,9 +90,9 @@ const nanoBananaDesigns = [
   },
   { 
     id: 3, 
-    name: 'الأزرق السماوي',
+    name: '🌙 الأزرق السماوي',
     bg: 'bg-cover bg-center',
-    bgImage: 'https://d2xsxph8kpxj0f.cloudfront.net/119893160/XYTkVdtKe78LAxqNrbimFo/eid-card-bg-3-sapphire-h52PBKGBzCJzLAGKwUW3SA.webp',
+    bgImage: 'https://d2xsxph8kpxj0f.cloudfront.net/119893160/XYTkVdtKe78LAxqNrbimFo/eid-card-simple-3-blue-BmiUWDCzdyyNGnBa9PaURv.webp',
     accent: 'bg-white/80',
     shadow: 'shadow-lg',
     textColor: 'text-gray-800',
@@ -99,9 +100,9 @@ const nanoBananaDesigns = [
   },
   { 
     id: 4, 
-    name: 'البيج والعنابي',
+    name: '💎 البيج والعنابي',
     bg: 'bg-cover bg-center',
-    bgImage: 'https://d2xsxph8kpxj0f.cloudfront.net/119893160/XYTkVdtKe78LAxqNrbimFo/eid-card-formal-4-BFq49gDvH3sEF7sXUWngYd.webp',
+    bgImage: 'https://d2xsxph8kpxj0f.cloudfront.net/119893160/XYTkVdtKe78LAxqNrbimFo/eid-card-simple-4-beige-Y3MFadj92BLxB6azDoCPfB.webp',
     accent: 'bg-white/80',
     shadow: 'shadow-lg',
     textColor: 'text-gray-800',
@@ -109,9 +110,9 @@ const nanoBananaDesigns = [
   },
   { 
     id: 5, 
-    name: 'الأزرق الفاتح',
+    name: '🌊 الأزرق الفاتح',
     bg: 'bg-cover bg-center',
-    bgImage: 'https://d2xsxph8kpxj0f.cloudfront.net/119893160/XYTkVdtKe78LAxqNrbimFo/eid-card-formal-5-anVWTeVSMZ8GEXeoSSRXQj.webp',
+    bgImage: 'https://d2xsxph8kpxj0f.cloudfront.net/119893160/XYTkVdtKe78LAxqNrbimFo/eid-card-simple-5-cyan-PiM8EERPGJ6fG2MMyst2eh.webp',
     accent: 'bg-white/80',
     shadow: 'shadow-lg',
     textColor: 'text-gray-800',
@@ -119,9 +120,9 @@ const nanoBananaDesigns = [
   },
   { 
     id: 6, 
-    name: 'الوردي والذهبي',
+    name: '🌸 الوردي والذهبي',
     bg: 'bg-cover bg-center',
-    bgImage: 'https://d2xsxph8kpxj0f.cloudfront.net/119893160/XYTkVdtKe78LAxqNrbimFo/eid-card-formal-6-enDsk6Y7h84mfvKztscLXr.webp',
+    bgImage: 'https://d2xsxph8kpxj0f.cloudfront.net/119893160/XYTkVdtKe78LAxqNrbimFo/eid-card-simple-6-rose-RKxaMssqNZJncChU7xpFuM.webp',
     accent: 'bg-white/80',
     shadow: 'shadow-lg',
     textColor: 'text-gray-800',
@@ -627,18 +628,65 @@ function NanoBananaCardSection() {
   }
 
   const shareCard = async (card: NanoCard) => {
-    const shareText = `بطاقة تهنئة من ${card.from} إلى ${card.to}\n\n${card.message}\n\nعيد مبارك! 🌙`
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: 'بطاقة تهنئة بالعيد',
-          text: shareText
+    try {
+      // Convert card to image and share
+      if (cardRef.current) {
+        // Use html2canvas to convert the card to an image
+        const canvas = await html2canvas(cardRef.current, {
+          backgroundColor: null,
+          scale: 2,
+          logging: false
         })
-      } catch {
-        copyToClipboard(shareText)
+        
+        canvas.toBlob(async (blob: Blob | null) => {
+          if (!blob) return
+          
+          const file = new File([blob], 'eid-card.png', { type: 'image/png' })
+          
+          if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+            try {
+              await navigator.share({
+                title: 'بطاقة تهنئة بالعيد',
+                text: `بطاقة تهنئة من ${card.from} إلى ${card.to}`,
+                files: [file]
+              })
+              toast.success('تم مشاركة البطاقة بنجاح! 🌟')
+            } catch (err) {
+              // If share fails, download the image
+              downloadCard()
+            }
+          } else {
+            // Fallback: download the image
+            downloadCard()
+          }
+        })
       }
-    } else {
-      copyToClipboard(shareText)
+    } catch (error) {
+      console.error('خطأ في مشاركة البطاقة:', error)
+      toast.error('حدث خطأ في مشاركة البطاقة')
+    }
+  }
+
+  const downloadCard = async () => {
+    try {
+      if (cardRef.current) {
+        const canvas = await html2canvas(cardRef.current, {
+          backgroundColor: null,
+          scale: 2,
+          logging: false
+        })
+        
+        const link = document.createElement('a')
+        link.href = canvas.toDataURL('image/png')
+        link.download = `بطاقة-عيد-الفطر-${Date.now()}.png`
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        toast.success('تم تحميل البطاقة! 🌟')
+      }
+    } catch (error) {
+      console.error('خطأ في تحميل البطاقة:', error)
+      toast.error('حدث خطأ في تحميل البطاقة')
     }
   }
 
@@ -809,6 +857,14 @@ function NanoBananaCardSection() {
               >
                 <Share2 className="w-4 h-4 ml-2" />
                 مشاركة
+              </Button>
+              <Button 
+                variant="outline" 
+                className="flex-1 border-2"
+                onClick={downloadCard}
+              >
+                <Heart className="w-4 h-4 ml-2" />
+                تحميل
               </Button>
             </div>
           )}
