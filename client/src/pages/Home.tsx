@@ -65,61 +65,67 @@ interface Recipe {
   image: string
 }
 
-// Nano Banana Card Designs - Modern 3D Style
+// Nano Banana Card Designs - Luxury Backgrounds
 const nanoBananaDesigns = [
   { 
     id: 1, 
-    name: 'الزمردي النيون',
-    bg: 'bg-gradient-to-br from-emerald-400 via-teal-500 to-cyan-600',
-    accent: 'bg-emerald-300/30',
-    shadow: 'shadow-emerald-500/50',
-    textColor: 'text-white',
-    decoration: '💎'
-  },
-  { 
-    id: 2, 
     name: 'الذهبي الملكي',
-    bg: 'bg-gradient-to-br from-amber-300 via-yellow-400 to-orange-500',
-    accent: 'bg-amber-200/40',
-    shadow: 'shadow-amber-500/50',
-    textColor: 'text-amber-900',
-    decoration: '👑'
-  },
-  { 
-    id: 3, 
-    name: 'الوردي الفاخر',
-    bg: 'bg-gradient-to-br from-pink-400 via-rose-500 to-fuchsia-600',
-    accent: 'bg-pink-300/30',
-    shadow: 'shadow-pink-500/50',
-    textColor: 'text-white',
-    decoration: '🌸'
-  },
-  { 
-    id: 4, 
-    name: 'البنفسجي الكوني',
-    bg: 'bg-gradient-to-br from-violet-400 via-purple-500 to-indigo-600',
-    accent: 'bg-violet-300/30',
-    shadow: 'shadow-violet-500/50',
-    textColor: 'text-white',
+    bg: 'bg-cover bg-center',
+    bgImage: 'https://d2xsxph8kpxj0f.cloudfront.net/119893160/XYTkVdtKe78LAxqNrbimFo/eid-card-bg-1-gold-4GRYHbAaf8MDYa4ErKzJWd.webp',
+    accent: 'bg-white/80',
+    shadow: 'shadow-lg',
+    textColor: 'text-gray-800',
     decoration: '✨'
   },
   { 
+    id: 2, 
+    name: 'الأخضر الزمردي',
+    bg: 'bg-cover bg-center',
+    bgImage: 'https://d2xsxph8kpxj0f.cloudfront.net/119893160/XYTkVdtKe78LAxqNrbimFo/eid-card-bg-2-emerald-BN6ybiHKGgJ8ZcvYTFz3sX.webp',
+    accent: 'bg-white/80',
+    shadow: 'shadow-lg',
+    textColor: 'text-gray-800',
+    decoration: '🌿'
+  },
+  { 
+    id: 3, 
+    name: 'الأزرق السماوي',
+    bg: 'bg-cover bg-center',
+    bgImage: 'https://d2xsxph8kpxj0f.cloudfront.net/119893160/XYTkVdtKe78LAxqNrbimFo/eid-card-bg-3-sapphire-h52PBKGBzCJzLAGKwUW3SA.webp',
+    accent: 'bg-white/80',
+    shadow: 'shadow-lg',
+    textColor: 'text-gray-800',
+    decoration: '🌙'
+  },
+  { 
+    id: 4, 
+    name: 'الوردي الفاخر',
+    bg: 'bg-cover bg-center',
+    bgImage: 'https://d2xsxph8kpxj0f.cloudfront.net/119893160/XYTkVdtKe78LAxqNrbimFo/eid-card-bg-4-coral-Gf2GF5bzRvZwCYKPVyrgJg.webp',
+    accent: 'bg-white/80',
+    shadow: 'shadow-lg',
+    textColor: 'text-gray-800',
+    decoration: '🌸'
+  },
+  { 
     id: 5, 
-    name: 'الأزرق المحيط',
-    bg: 'bg-gradient-to-br from-cyan-400 via-blue-500 to-indigo-600',
-    accent: 'bg-cyan-300/30',
-    shadow: 'shadow-cyan-500/50',
-    textColor: 'text-white',
-    decoration: '🌊'
+    name: 'الجواهري الملكي',
+    bg: 'bg-cover bg-center',
+    bgImage: 'https://d2xsxph8kpxj0f.cloudfront.net/119893160/XYTkVdtKe78LAxqNrbimFo/eid-card-bg-5-jewel-Rhu6gE8HAbnvkc929BJi5Y.webp',
+    accent: 'bg-white/80',
+    shadow: 'shadow-lg',
+    textColor: 'text-gray-800',
+    decoration: '💎'
   },
   { 
     id: 6, 
-    name: 'المرجاني الحيوي',
-    bg: 'bg-gradient-to-br from-coral-400 via-red-400 to-pink-500',
-    accent: 'bg-red-300/30',
-    shadow: 'shadow-red-500/50',
-    textColor: 'text-white',
-    decoration: '🔥'
+    name: 'غروب الشمس الدافئ',
+    bg: 'bg-cover bg-center',
+    bgImage: 'https://d2xsxph8kpxj0f.cloudfront.net/119893160/XYTkVdtKe78LAxqNrbimFo/eid-card-bg-6-sunset-crmSYuB7dXdK3umAGNX8hm.webp',
+    accent: 'bg-white/80',
+    shadow: 'shadow-lg',
+    textColor: 'text-gray-800',
+    decoration: '🌅'
   },
 ]
 
@@ -746,7 +752,7 @@ function NanoBananaCardSection() {
             ref={cardRef}
             className={`relative overflow-hidden rounded-3xl p-8 min-h-[400px] flex flex-col justify-between shadow-2xl transition-all duration-500`}
             style={{
-              backgroundImage: 'url(https://d2xsxph8kpxj0f.cloudfront.net/119893160/XYTkVdtKe78LAxqNrbimFo/eid-card-background-kYKXX9Nh7Vzq5xNiSn4X2v.webp)',
+              backgroundImage: `url(${currentDesign.bgImage})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center'
             }}
@@ -821,7 +827,7 @@ function NanoBananaCardSection() {
                   <div 
                     className="relative overflow-hidden p-6 min-h-[280px] flex flex-col justify-between"
                     style={{
-                      backgroundImage: 'url(https://d2xsxph8kpxj0f.cloudfront.net/119893160/XYTkVdtKe78LAxqNrbimFo/eid-card-background-kYKXX9Nh7Vzq5xNiSn4X2v.webp)',
+                      backgroundImage: `url(${design.bgImage})`,
                       backgroundSize: 'cover',
                       backgroundPosition: 'center'
                     }}
