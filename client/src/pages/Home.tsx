@@ -744,25 +744,17 @@ function NanoBananaCardSection() {
           {/* The Card */}
           <div 
             ref={cardRef}
-            className={`relative overflow-hidden rounded-3xl ${currentDesign.bg} p-8 min-h-[400px] flex flex-col justify-between ${currentDesign.shadow} shadow-2xl transition-all duration-500`}
+            className={`relative overflow-hidden rounded-3xl p-8 min-h-[400px] flex flex-col justify-between shadow-2xl transition-all duration-500`}
+            style={{
+              backgroundImage: 'url(https://d2xsxph8kpxj0f.cloudfront.net/119893160/XYTkVdtKe78LAxqNrbimFo/eid-card-background-kYKXX9Nh7Vzq5xNiSn4X2v.webp)',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center'
+            }}
           >
             {/* Decorative Elements */}
             <div className="absolute inset-0 overflow-hidden">
-              {/* Floating shapes */}
-              <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full blur-2xl animate-pulse" />
-              <div className="absolute -bottom-10 -left-10 w-32 h-32 bg-white/10 rounded-full blur-xl animate-pulse" style={{ animationDelay: '1s' }} />
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-60 h-60 bg-white/5 rounded-full blur-3xl" />
-              
-              {/* Geometric patterns */}
-              <div className="absolute top-4 left-4 w-8 h-8 border-2 border-white/20 rounded-lg rotate-12" />
-              <div className="absolute top-4 right-4 w-6 h-6 bg-white/10 rounded-full" />
-              <div className="absolute bottom-4 left-4 w-4 h-4 bg-white/10 rounded-full" />
-              <div className="absolute bottom-4 right-4 w-10 h-10 border-2 border-white/20 rounded-xl -rotate-12" />
-              
-              {/* Stars */}
-              <div className="absolute top-8 left-1/4 text-white/30 text-xl">✦</div>
-              <div className="absolute top-16 right-1/4 text-white/20 text-lg">✦</div>
-              <div className="absolute bottom-16 left-1/3 text-white/25 text-sm">✦</div>
+              {/* Overlay for better text readability */}
+              <div className="absolute inset-0 bg-black/20" />
             </div>
 
             {/* Card Content */}
@@ -775,22 +767,22 @@ function NanoBananaCardSection() {
                 {/* Message Content */}
                 {message ? (
                   <div className="space-y-4">
-                    <p className={`${currentDesign.textColor} text-2xl font-bold leading-relaxed`}>
+                    <p className="text-white text-2xl font-bold leading-relaxed drop-shadow-lg">
                       {message}
                     </p>
                   </div>
                 ) : (
-                  <p className={`${currentDesign.textColor} text-2xl opacity-50`}>أدخل رسالتك...</p>
+                  <p className="text-white text-2xl opacity-50 drop-shadow-lg">أدخل رسالتك...</p>
                 )}
 
                 {/* Sender and Recipient - Minimal */}
-                <div className="flex justify-between items-center pt-6 border-t border-white/20">
-                  <div className={`${currentDesign.textColor} text-sm opacity-80`}>
-                    <span className="text-xs opacity-60">من</span><br />
+                <div className="flex justify-between items-center pt-6 border-t border-white/30">
+                  <div className="text-white text-sm opacity-90 drop-shadow-lg">
+                    <span className="text-xs opacity-70">من</span><br />
                     <span className="font-semibold">{from || '...'}</span>
                   </div>
-                  <div className={`${currentDesign.textColor} text-sm opacity-80`}>
-                    <span className="text-xs opacity-60">إلى</span><br />
+                  <div className="text-white text-sm opacity-90 drop-shadow-lg">
+                    <span className="text-xs opacity-70">إلى</span><br />
                     <span className="font-semibold">{to || '...'}</span>
                   </div>
                 </div>
@@ -826,25 +818,29 @@ function NanoBananaCardSection() {
               const design = nanoBananaDesigns.find(d => d.id === card.designId) || nanoBananaDesigns[0]
               return (
                 <Card key={card.id} className="overflow-hidden border-0 shadow-xl group">
-                  <div className={`relative overflow-hidden ${design.bg} p-6 min-h-[280px] flex flex-col justify-between`}>
-                    {/* Background effects */}
-                    <div className="absolute inset-0">
-                      <div className="absolute -top-8 -right-8 w-24 h-24 bg-white/10 rounded-full blur-xl" />
-                      <div className="absolute -bottom-8 -left-8 w-20 h-20 bg-white/10 rounded-full blur-lg" />
-                    </div>
+                  <div 
+                    className="relative overflow-hidden p-6 min-h-[280px] flex flex-col justify-between"
+                    style={{
+                      backgroundImage: 'url(https://d2xsxph8kpxj0f.cloudfront.net/119893160/XYTkVdtKe78LAxqNrbimFo/eid-card-background-kYKXX9Nh7Vzq5xNiSn4X2v.webp)',
+                      backgroundSize: 'cover',
+                      backgroundPosition: 'center'
+                    }}
+                  >
+                    {/* Overlay for better text readability */}
+                    <div className="absolute inset-0 bg-black/20" />
                     
                     {/* Content */}
                     <div className="relative z-10 text-center space-y-3">
                       <div className="text-3xl">{design.decoration}</div>
-                      <h4 className={`text-xl font-bold ${design.textColor}`}>عيد مبارك</h4>
-                      <p className={`text-sm ${design.textColor} opacity-90`}>إلى: {card.to}</p>
-                      <p className={`text-xs ${design.textColor} opacity-80 line-clamp-2`}>{card.message}</p>
+                      <h4 className="text-xl font-bold text-white drop-shadow-lg">عيد مبارك</h4>
+                      <p className="text-sm text-white opacity-90 drop-shadow-lg">إلى: {card.to}</p>
+                      <p className="text-xs text-white opacity-80 line-clamp-2 drop-shadow-lg">{card.message}</p>
                       {card.poem.length > 0 && (
-                        <p className={`text-xs ${design.textColor} opacity-60 italic`}>
+                        <p className="text-xs text-white opacity-60 italic drop-shadow-lg">
                           {card.poem[0]}...
                         </p>
                       )}
-                      <p className={`text-xs ${design.textColor} opacity-90`}>من: {card.from}</p>
+                      <p className="text-xs text-white opacity-90 drop-shadow-lg">من: {card.from}</p>
                     </div>
                   </div>
                   <div className="p-3 flex justify-between items-center bg-gray-50 dark:bg-gray-800">
