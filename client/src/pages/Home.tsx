@@ -1013,16 +1013,6 @@ export default function Home() {
                     </Button>
                   </div>
                 )}
-                {!isAuthenticated && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => window.location.href = getLoginUrl()}
-                    className="text-white hover:bg-white/20"
-                  >
-                    تسجيل الدخول
-                  </Button>
-                )}
                 <Button
                   variant="ghost"
                   size="icon"
