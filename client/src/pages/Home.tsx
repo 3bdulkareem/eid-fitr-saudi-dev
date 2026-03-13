@@ -99,33 +99,33 @@ const nanoBananaDesigns = [
   },
   { 
     id: 4, 
-    name: 'الوردي الفاخر',
+    name: 'البيج والعنابي',
     bg: 'bg-cover bg-center',
-    bgImage: 'https://d2xsxph8kpxj0f.cloudfront.net/119893160/XYTkVdtKe78LAxqNrbimFo/eid-card-bg-4-coral-Gf2GF5bzRvZwCYKPVyrgJg.webp',
-    accent: 'bg-white/80',
-    shadow: 'shadow-lg',
-    textColor: 'text-gray-800',
-    decoration: '🌸'
-  },
-  { 
-    id: 5, 
-    name: 'الجواهري الملكي',
-    bg: 'bg-cover bg-center',
-    bgImage: 'https://d2xsxph8kpxj0f.cloudfront.net/119893160/XYTkVdtKe78LAxqNrbimFo/eid-card-bg-5-jewel-Rhu6gE8HAbnvkc929BJi5Y.webp',
+    bgImage: 'https://d2xsxph8kpxj0f.cloudfront.net/119893160/XYTkVdtKe78LAxqNrbimFo/eid-card-formal-4-BFq49gDvH3sEF7sXUWngYd.webp',
     accent: 'bg-white/80',
     shadow: 'shadow-lg',
     textColor: 'text-gray-800',
     decoration: '💎'
   },
   { 
-    id: 6, 
-    name: 'غروب الشمس الدافئ',
+    id: 5, 
+    name: 'الأزرق الفاتح',
     bg: 'bg-cover bg-center',
-    bgImage: 'https://d2xsxph8kpxj0f.cloudfront.net/119893160/XYTkVdtKe78LAxqNrbimFo/eid-card-bg-6-sunset-crmSYuB7dXdK3umAGNX8hm.webp',
+    bgImage: 'https://d2xsxph8kpxj0f.cloudfront.net/119893160/XYTkVdtKe78LAxqNrbimFo/eid-card-formal-5-anVWTeVSMZ8GEXeoSSRXQj.webp',
     accent: 'bg-white/80',
     shadow: 'shadow-lg',
     textColor: 'text-gray-800',
-    decoration: '🌅'
+    decoration: '🌊'
+  },
+  { 
+    id: 6, 
+    name: 'الوردي والذهبي',
+    bg: 'bg-cover bg-center',
+    bgImage: 'https://d2xsxph8kpxj0f.cloudfront.net/119893160/XYTkVdtKe78LAxqNrbimFo/eid-card-formal-6-enDsk6Y7h84mfvKztscLXr.webp',
+    accent: 'bg-white/80',
+    shadow: 'shadow-lg',
+    textColor: 'text-gray-800',
+    decoration: '🌸'
   },
 ]
 
